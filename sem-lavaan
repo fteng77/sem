@@ -1,0 +1,58 @@
+***加载lavaan和画图的库***
+
+install.packages("lavaan", dependencies=TRUE)
+install.packages("stringr")
+install.packages("DiagrammeR")
+install.packages("dplyr")
+install.packages("semPlot")
+install.packages("nloptr")
+
+library("stringr")
+library('lavaan')
+library("DiagrammeR")
+library("dplyr")
+library('nloptr')
+library("semPlot")
+
+***读入数据集***
+dat1 <- read.csv("C:/Desktop/DT.csv")
+
+***设定结构方程模型***
+Model1 <- '
+grit =~ GritInterest + GritPersistence
+GritInterest ~~ GritPersistence
+grit ~ External + Introjected + Identified + Intrinsic + GM
+External ~ GM
+Introjected ~ GM
+Identified ~ GM
+Intrinsic ~ GM
+External ~~ Introjected + Identified + Intrinsic
+Introjected ~~ Identified + Intrinsic
+Identified ~~ Intrinsic
+'
+
+Model2 <- '
+grit =~ GritInterest + GritPersistence
+grit ~ External + Introjected + Identified + Intrinsic + GM
+External ~ GM
+Introjected ~ GM
+Identified ~ GM
+Intrinsic ~ GM
+'
+
+***计算拟合***
+fit1 <- sem(model=Model1,data=dat1)
+fit2 <- sem(model=Model2,data=dat1)
+
+***输出拟合结果***
+summary(fit1,standardized=T,fit.measures=T,rsq=T,modindices = TRUE)
+summary(fit2,standardized=T,fit.measures=T,rsq=T,modindices = TRUE)
+
+***画图***
+semPaths(fit1, intercept = FALSE, whatLabel = "est",
+         residuals = FALSE, exoCov = FALSE)
+
+***作者：侯悍超
+***链接：https://www.jianshu.com/p/e0938fb35c45
+***來源：简书
+***简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
